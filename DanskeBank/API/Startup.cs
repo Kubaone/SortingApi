@@ -20,6 +20,7 @@ namespace API
         {
             services.AddControllers().AddNewtonsoftJson();
             services.AddScoped<IBubbleSorter, BubbleSorter>();
+            services.AddScoped<IFileWriter, FileWriter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
