@@ -1,3 +1,5 @@
+using Core.Helpers;
+using Core.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -17,6 +19,7 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddNewtonsoftJson();
+            services.AddScoped<IBubbleSorter, BubbleSorter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

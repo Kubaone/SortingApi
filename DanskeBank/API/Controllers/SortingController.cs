@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Core.Helpers;
+using Core.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +12,18 @@ namespace API.Controllers
     [Route("[controller]")]
     public class SortingController: ControllerBase
     {
-        public SortingController()
-        {
+        private IBubbleSorter _bubbleSorter;
 
+        public SortingController(IBubbleSorter bubbleSorter)
+        {
+            _bubbleSorter = bubbleSorter;
         }
 
         [HttpPost]
-        public void BubbleSort([FromBody] double[] numbers)
+        public IActionResult BubbleSort([FromBody] int[] numbers)
         {
+            var sortedNumbers = _bubbleSorter.SortNumbers(numbers);
+            return Ok(sortedNumbers);
         }
     }
 }
