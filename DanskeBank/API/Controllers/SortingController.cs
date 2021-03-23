@@ -19,8 +19,14 @@ namespace API.Controllers
             _fileWriter = fileWriter;
         }
 
+        [HttpGet]
+        public IActionResult GetLatestSortingResult()
+        {
+            return Ok(_fileWriter.GetLatestFileWritten());
+        }
+
         [HttpPost]
-        public IActionResult BubbleSort([FromBody] int[] numbers)
+        public IActionResult BubbleSortArray([FromBody] int[] numbers)
         {
             var sortedNumbers = _bubbleSorter.SortNumbers(numbers);
             var fileContent = String.Join(" ", sortedNumbers.Select(n => n.ToString()));
