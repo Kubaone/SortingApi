@@ -20,6 +20,7 @@ namespace API
         {
             services.AddControllers().AddNewtonsoftJson();
             services.AddScoped<IBubbleSorter, BubbleSorter>();
+            services.AddScoped<IQuickSorter, QuickSorter>();
             services.AddScoped<IFileWriter, FileWriter>();
         }
 

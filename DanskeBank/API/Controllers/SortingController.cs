@@ -12,11 +12,13 @@ namespace API.Controllers
     {
         private IBubbleSorter _bubbleSorter;
         private IFileWriter _fileWriter;
+        private IQuickSorter _quickSorter;
 
-        public SortingController(IFileWriter fileWriter, IBubbleSorter bubbleSorter)
+        public SortingController(IFileWriter fileWriter, IBubbleSorter bubbleSorter, IQuickSorter quickSorter)
         {
             _bubbleSorter = bubbleSorter;
             _fileWriter = fileWriter;
+            _quickSorter = quickSorter;
         }
 
         [HttpGet]
@@ -26,13 +28,24 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public IActionResult BubbleSortArray([FromBody] int[] numbers)
+        public IActionResult SortIntegerArray([FromBody] int[] numbers)
         {
-            var sortedNumbers = _bubbleSorter.SortNumbers(numbers);
-            var fileContent = String.Join(" ", sortedNumbers.Select(n => n.ToString()));
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            var sortedNumbersByBubble = _bubbleSorter.SortNumbers(numbers);
+            watch.Stop();
+            var bubbleSortExecutionTime = watch.ElapsedMilliseconds;
 
+            watch.Restart();
+            var sortedNumbersByQuick = _quickSorter.SortNumbers(numbers);
+            watch.Stop();
+            var quickSortExecutionTime = watch.ElapsedMilliseconds;
+
+            var executionTimeDiff = Math.Abs(bubbleSortExecutionTime - quickSortExecutionTime);
+
+            var fileContent = String.Join(" ", sortedNumbersByQuick.Select(n => n.ToString()));
             _fileWriter.Write(fileContent);
-            return Ok(sortedNumbers);
+
+            return Ok(sortedNumbersByQuick);
         }
     }
 }
